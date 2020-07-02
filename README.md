@@ -1,4 +1,4 @@
-#Linkedin Automator
+# Linkedin Automator
 
 A simple pupeeter project to connect to the list of linkedin profiles from a *txt* file.
 
