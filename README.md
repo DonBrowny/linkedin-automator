@@ -4,7 +4,8 @@ A simple pupeeter project to connect to the list of linkedin profiles from a *tx
 
 ## Prerequisite
 
-- Node
+- [Node JS](https://nodejs.org/en/)
+- Google Chrome or Chromium broswer.
 
 ## Setting up the code.
 
