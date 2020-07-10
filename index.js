@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const readline = require("readline");
 
@@ -9,14 +9,20 @@ const moreClass = ".pv-s-profile-actions__overflow-toggle";
 const moreOptionsClass = ".pv-s-profile-actions__label";
 const removeConnection = "Remove Connection";
 
-module.exports = async function processLineByLine(fileName, userName, pass) {
-  if(!fileName || !userName || !pass){
+module.exports = async function processLineByLine(fileName) {
+  if (!fileName) {
     return;
   }
-  const browser = await puppeteer.launch({ headless: false });
+  const { userName, password, connectionsPath, chromiumPath } = JSON.parse(
+    fs.readFileSync(fileName, "utf-8")
+  );
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: chromiumPath,
+  });
   const page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 768 });
-  const fileStream = fs.createReadStream(fileName);
+  const fileStream = fs.createReadStream(connectionsPath);
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -28,14 +34,15 @@ module.exports = async function processLineByLine(fileName, userName, pass) {
     urls.push(line);
   }
   //Login into Linkedin
-  await login(page,userName,pass);
+  await login(page, userName, password);
 
   //Open all the connections and click on connect
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
     writeFile(`${url}, ${await connect(url, page)}`);
   }
-}
+  await browser.close();
+};
 
 function writeFile(content) {
   var stream = fs.createWriteStream("./output.csv", { flags: "a" });
@@ -46,10 +53,10 @@ function writeFile(content) {
 async function connect(url, page) {
   await page.goto(url);
   //Check whether the url is vaid
-  const notFoundDiv = await page.$(".not-found")
-  const inValidProfile = await page.$(".profile-unavailable")
-  if(notFoundDiv || inValidProfile){
-    return 'Invalid Url / Profile Unavailable'
+  const notFoundDiv = await page.$(".not-found");
+  const inValidProfile = await page.$(".profile-unavailable");
+  if (notFoundDiv || inValidProfile) {
+    return "Invalid Url / Profile Unavailable";
   }
   //Check whether the connect button is present
   try {
@@ -67,7 +74,7 @@ async function connect(url, page) {
       //Search and click connect if it is there inside more dropdown
       const moreButtonSelector = await page.$(moreClass);
       await moreButtonSelector.click();
-      await page.waitFor(2000)
+      await page.waitFor(2000);
       const moreOptions = await page.$$(moreOptionsClass);
       for (const option of moreOptions) {
         const innerText = await page.evaluate((el) => el.innerText, option);
@@ -89,10 +96,10 @@ async function connect(url, page) {
   return "Pending";
 }
 
-async function login(page,userName,pass) {
+async function login(page, userName, password) {
   await page.goto("https://www.linkedin.com/login");
   await page.type("input[id=username]", userName, { delay: 100 });
-  await page.type("input[id=password]", pass);
+  await page.type("input[id=password]", password);
   await Promise.all([
     page.click(loginButton, { delay: 1000 }),
     page.waitForNavigation(),

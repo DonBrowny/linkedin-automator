@@ -1,0 +1,6 @@
+{
+    "userName": "Linkedin-UserName",
+    "password": "Linkedin-Password", 
+    "connectionsPath" : "Path To Connections File",
+    "chromiumPath" : "Path To Chrome/Chromium Broswer"
+}
