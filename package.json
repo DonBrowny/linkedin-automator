@@ -5,13 +5,15 @@
   "main": "index.js",
   "bin": "bin.js",
   "scripts": {
-    "start" : "node bin.js ./config.json",
+    "start": "node bin.js ./config.json",
+    "sample": "node bin.js ./test-config.json",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build index.js"
+    "build": "pkg . --targets node12-win-x64 --out-path ./dist"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cli-progress": "^3.8.2",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-externals": "^0.4.0",
     "puppeteer-core": "^3.3.0"

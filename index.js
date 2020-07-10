@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const readline = require("readline");
+const cliProgress = require("cli-progress");
 
 const loginButton =
   "#app__container > main > div:nth-child(2) > form > div.login__form_action_container > button";
@@ -35,13 +36,20 @@ module.exports = async function processLineByLine(fileName) {
   }
   //Login into Linkedin
   await login(page, userName, password);
+  const progressBar = new cliProgress.SingleBar(
+    {},
+    cliProgress.Presets.shades_classic
+  );
+  progressBar.start(urls.length, 0);
 
   //Open all the connections and click on connect
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
     writeFile(`${url}, ${await connect(url, page)}`);
+    progressBar.increment();
   }
   await browser.close();
+  progressBar.stop();
 };
 
 function writeFile(content) {
