@@ -4,13 +4,15 @@ A simple pupeeter project to connect to the list of linkedin profiles from a *tx
 
 ## Prerequisite
 
-- Node
+- [Node JS](https://nodejs.org/en/)
+- Google Chrome or Chromium broswer.
 
 ## Setting up the code.
 
 - Clone this repository 
 - Run the command `npm install` to install all the dependencies.
-- Run the command `node bin.js <connectionsFilePath> <linkedin-userName> <linkedin-pass>` to start the application
+- Update the *config.json* file.
+- Run the command `npm run start` to start the application
 Note:
 > A sample connections file is available as connections.txt
 
