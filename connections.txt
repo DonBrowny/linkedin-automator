@@ -1,3 +1,1 @@
-https://www.linkedin.com/in/ebenezer-parry-cmrp-a59aaa20/
-https://www.linkedin.com/in/walter-gift-agbey-5bb73717/
-https://www.linkedin.com/in/scott-wotherspoon-42a81b97/
+--Enter the url of the linkedin profiles @ one url per line--
